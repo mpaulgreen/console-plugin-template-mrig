@@ -14,7 +14,15 @@
       "name": "Plugin Example",
       "href": "/example",
       "perspective": "admin",
-      "section": "home"
+      "section": "openshiftplus"    }
+  },
+  {
+    "type": "console.navigation/section",
+    "properties": {
+      "id": "openshiftplus",
+      "name": "Mriganka's Custom Plugin",
+      "perspective": "admin"
     }
   }
+
 ]
