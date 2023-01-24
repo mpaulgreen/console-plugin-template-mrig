@@ -23,6 +23,18 @@
       "name": "Mriganka's Custom Plugin",
       "perspective": "admin"
     }
+  },
+  {
+    "type": "console.page/route",
+    "properties": {
+      "exact": false,
+      "path": [
+        "/k8s/ns/:ns/operators.coreos.com~v1alpha1~ClusterServiceVersion/cronjob.v0.0.1"
+      ],
+      "component": {
+        "$codeRef": "ExamplePage"
+      }
+    }
   }
 
 ]
