@@ -206,7 +206,20 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@^4.72.3":
+"@patternfly/react-core@^4.267.6":
+  version "4.267.6"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.267.6.tgz#d9a755e627fa333647ace30c15c400db47046799"
+  integrity sha512-4sb0OeGHLSLfFzrs5Tn3IXHuu6VLb+6v/FG4vcMccnGq7j/Bocns40g5mPkxC9KVbWHq7lT34wfKzS5kyIBHKQ==
+  dependencies:
+    "@patternfly/react-icons" "^4.93.3"
+    "@patternfly/react-styles" "^4.92.3"
+    "@patternfly/react-tokens" "^4.94.3"
+    focus-trap "6.9.2"
+    react-dropzone "9.0.0"
+    tippy.js "5.1.2"
+    tslib "^2.0.0"
+
+"@patternfly/react-icons@^4.72.3", "@patternfly/react-icons@^4.93.3":
   version "4.93.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.93.3.tgz#ba617b1daefce81ba903bc702ff66060413e2a9f"
   integrity sha512-OIEeTc4Noi9XOIRF3OB3sz9dRnxr1h4eNIzIeZwRd8xXWCQxYcrllxPV98F3+RpL4ZCH2QWb/2gG4mHrVyX+0A==
@@ -221,7 +234,7 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.74.1.tgz#3cd19cd31dd896bfd046f79241e8a8aefbfb1152"
   integrity sha512-9eWvKrjtrJ3qhJkhY2GQKyYA13u/J0mU1befH49SYbvxZtkbuHdpKmXBAeQoHmcx1hcOKtiYXeKb+dVoRRNx0A==
 
-"@patternfly/react-styles@^4.71.3":
+"@patternfly/react-styles@^4.71.3", "@patternfly/react-styles@^4.92.3":
   version "4.92.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.92.3.tgz#046acee6e38c996cf41c288819eca17c3634a782"
   integrity sha512-jC8F71trFWVYM7YVTP/3MBLwLZDCY3tgHeAmSKdcw6R607LK4rtCzfw5lt2IHNmAjQ0ggqDlJGWsJAfGMe4iPA==
@@ -238,7 +251,19 @@
     lodash "^4.17.19"
     tslib "^2.0.0"
 
-"@patternfly/react-tokens@^4.73.3":
+"@patternfly/react-table@^4.112.6":
+  version "4.112.6"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.112.6.tgz#7550ee9571b4650a5a87fd65be1494874ea52582"
+  integrity sha512-PNyBF64bCX3QtctzUKl13ycsXCY6SIWlXYJbdxnpRtXNfQ+9y0G70s+RDO6jw3osLtcxA06NfyMz0vuaqevPaA==
+  dependencies:
+    "@patternfly/react-core" "^4.267.6"
+    "@patternfly/react-icons" "^4.93.3"
+    "@patternfly/react-styles" "^4.92.3"
+    "@patternfly/react-tokens" "^4.94.3"
+    lodash "^4.17.19"
+    tslib "^2.0.0"
+
+"@patternfly/react-tokens@^4.73.3", "@patternfly/react-tokens@^4.94.3":
   version "4.94.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.94.3.tgz#efc7e61ed94299423443db7416a6a52d8b56d8c6"
   integrity sha512-Rq8RMJ/iu/nTDidEb/xQWUMXFW+W4MuoLBonTAFv/Bx8G3gFMHU2JGtv9R5SvAYU6Eux9EkjCG7h3xiLqwH3jg==
