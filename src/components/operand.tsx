@@ -1,130 +1,139 @@
 import * as React from 'react';
-
 import {
-  TableComposable,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  ThProps,
-} from '@patternfly/react-table';
+  ListPageHeader,
+  ListPageBody,
+  VirtualizedTable,
+  useK8sWatchResource,
+  useListPageFilter,
+  K8sResourceCommon,
+  ListPageFilter,
+  TableData,
+  RowProps,
+  TableColumn,
+  ResourceLink,
+  Timestamp,
+} from '@openshift-console/dynamic-plugin-sdk';
 
-interface Repository {
-  name: string;
-  kind: string;
-  namespace: string;
-  status: string;
-  labels: string;
-  lastUpdated: string;
-}
+import { Labels } from './label-list';
 
-export const ComposableTableSortableCustom: React.FunctionComponent = () => {
-  // In real usage, this data would come from some external source like an API via props.
-  const repositories: Repository[] = [
-    {
-      name: 'cronjob-sample',
-      kind: 'Cronjob',
-      namespace: 'crojob-project',
-      status: '-',
-      labels:
-        'app.kubernetes.io/name: cronjob app.kubernetes.io/instance: cronjob-sample',
-      lastUpdated: 'Jan 24,2023, 4:27 PM',
-    },
-  ];
+const columns: TableColumn<K8sResourceCommon>[] = [
+  {
+    title: 'Name',
+    id: 'name',
+  },
+  {
+    title: 'Kind',
+    id: 'kind',
+  },
+  {
+    title: 'Namespace',
+    id: 'namespace',
+  },
+  {
+    title: 'Status',
+    id: 'status',
+  },
+  {
+    title: 'Labels',
+    id: 'lables',
+  },
+  {
+    title: 'Last Updated',
+    id: 'lastUpdated',
+  },
+];
 
-  const columnNames = {
-    name: 'Name',
-    kind: 'Kind',
-    namespace: 'Namespace',
-    status: 'Status',
-    labels: 'Labels',
-    lastUpdated: 'Last Updated',
-  };
-
-  // Index of the currently sorted column
-  // Note: if you intend to make columns reorderable, you may instead want to use a non-numeric key
-  // as the identifier of the sorted column. See the "Compound expandable" example.
-  const [activeSortIndex, setActiveSortIndex] = React.useState<number | null>(
-    null,
-  );
-
-  // Sort direction of the currently sorted column
-  const [activeSortDirection, setActiveSortDirection] = React.useState<
-    'asc' | 'desc' | null
-  >(null);
-
-  // Since OnSort specifies sorted columns by index, we need sortable values for our object by column index.
-  // This example is trivial since our data objects just contain strings, but if the data was more complex
-  // this would be a place to return simplified string or number versions of each column to sort by.
-  const getSortableRowValues = (repo: Repository): (string | number)[] => {
-    const { name, kind, namespace, status, labels, lastUpdated } = repo;
-    return [name, name, kind, namespace, status, labels, lastUpdated];
-  };
-
-  // Note that we perform the sort as part of the component's render logic and not in onSort.
-  // We shouldn't store the list of data in state because we don't want to have to sync that with props.
-  let sortedRepositories = repositories;
-  if (activeSortIndex !== null) {
-    sortedRepositories = repositories.sort((a, b) => {
-      const aValue = getSortableRowValues(a)[activeSortIndex];
-      const bValue = getSortableRowValues(b)[activeSortIndex];
-      if (typeof aValue === 'number') {
-        // Numeric sort
-        if (activeSortDirection === 'asc') {
-          return (aValue as number) - (bValue as number);
-        }
-        return (bValue as number) - (aValue as number);
-      } else {
-        // String sort
-        if (activeSortDirection === 'asc') {
-          return (aValue as string).localeCompare(bValue as string);
-        }
-        return (bValue as string).localeCompare(aValue as string);
-      }
-    });
-  }
-
-  const getSortParams = (columnIndex: number): ThProps['sort'] => ({
-    sortBy: {
-      index: activeSortIndex,
-      direction: activeSortDirection,
-    },
-    onSort: (_event, index, direction) => {
-      setActiveSortIndex(index);
-      setActiveSortDirection(direction);
-    },
-    columnIndex,
-  });
-
+const CronJobRow: React.FC<RowProps<K8sResourceCommon>> = ({
+  obj,
+  activeColumnIDs,
+}) => {
   return (
-    <React.Fragment>
-      <TableComposable aria-label="Sortable table custom toolbar">
-        <Thead>
-          <Tr>
-            <Th sort={getSortParams(0)}>{columnNames.name}</Th>
-            <Th sort={getSortParams(1)}>{columnNames.kind}</Th>
-            <Th sort={getSortParams(3)}>{columnNames.namespace}</Th>
-            <Th sort={getSortParams(4)}>{columnNames.status}</Th>
-            <Th sort={getSortParams(5)}>{columnNames.labels}</Th>
-            <Th sort={getSortParams(6)}>{columnNames.lastUpdated}</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {sortedRepositories.map((repo, rowIndex) => (
-            <Tr key={rowIndex}>
-              <Td dataLabel={columnNames.name}>{repo.name}</Td>
-              <Td dataLabel={columnNames.kind}>{repo.kind}</Td>
-              <Td dataLabel={columnNames.namespace}>{repo.namespace}</Td>
-              <Td dataLabel={columnNames.status}>{repo.status}</Td>
-              <Td dataLabel={columnNames.labels}>{repo.labels}</Td>
-              <Td dataLabel={columnNames.lastUpdated}>{repo.lastUpdated}</Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </TableComposable>
-    </React.Fragment>
+    <>
+      <TableData id={columns[0].id} activeColumnIDs={activeColumnIDs}>
+        <ResourceLink
+          kind="CronJob"
+          name={obj.metadata.name}
+          namespace={obj.metadata.namespace}
+        />
+      </TableData>
+      <TableData id={columns[1].id} activeColumnIDs={activeColumnIDs}>
+        <ResourceLink kind="Kind" name={obj.kind} hideIcon={true} />
+      </TableData>
+      <TableData id={columns[2].id} activeColumnIDs={activeColumnIDs}>
+        <ResourceLink kind="Namespace" name={obj.metadata.namespace} />
+      </TableData>
+      <TableData id={columns[3].id} activeColumnIDs={activeColumnIDs}>
+        <ResourceLink kind="Status" displayName={'-'} hideIcon={true} />
+      </TableData>
+      <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>
+        <Labels kind={obj.kind} labels={obj.metadata.labels} />
+      </TableData>
+      <TableData id={columns[4].id} activeColumnIDs={activeColumnIDs}>
+        <Timestamp timestamp={obj.metadata.creationTimestamp} />
+      </TableData>
+    </>
   );
 };
 
-export default ComposableTableSortableCustom;
+type ConJobsTableProps = {
+  data: K8sResourceCommon[];
+  unfilteredData: K8sResourceCommon[];
+  loaded: boolean;
+  loadError: any;
+};
+
+const ConJobsTable: React.FC<ConJobsTableProps> = ({
+  data,
+  unfilteredData,
+  loaded,
+  loadError,
+}) => {
+  return (
+    <VirtualizedTable<K8sResourceCommon>
+      data={data}
+      unfilteredData={unfilteredData}
+      loaded={loaded}
+      loadError={loadError}
+      columns={columns}
+      Row={CronJobRow}
+    />
+  );
+};
+
+const ListPage = () => {
+  const [cronjobs, loaded, loadError] = useK8sWatchResource<
+    K8sResourceCommon[]
+  >({
+    groupVersionKind: {
+      group: 'batch.tutorial.kubebuilder.io',
+      version: 'v1alpha1',
+      kind: 'CronJob',
+    },
+    isList: true,
+    namespaced: false,
+  });
+
+  const [data] = useListPageFilter(cronjobs);
+
+  return (
+    <>
+      <ListPageHeader title="Mriganka Custom CronJobs"></ListPageHeader>
+      <ListPageBody>
+        <ListPageFilter
+          data={data}
+          loaded={loaded}
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          onFilterChange={function () {}}
+        />
+        <ConJobsTable
+          data={data}
+          unfilteredData={data}
+          loaded={loaded}
+          loadError={loadError}
+        />
+      </ListPageBody>
+    </>
+  );
+};
+
+export default ListPage;
